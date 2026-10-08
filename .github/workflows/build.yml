@@ -1,0 +1,30 @@
+name: Build Chronos.exe
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build exe
+        run: pyinstaller --windowed --onefile --name Chronos chronos.py
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: Chronos-windows
+          path: dist/Chronos.exe
